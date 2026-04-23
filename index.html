@@ -10,12 +10,9 @@
 <body>
 
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
-
-// 👇 これがポイント（ESM対応版）
-import { IFCLoader } from 'https://cdn.jsdelivr.net/npm/web-ifc-three@0.0.125/dist/IFCLoader.js';
-
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'https://esm.sh/three@0.152.2';
+import { IFCLoader } from 'https://esm.sh/web-ifc-three@0.0.125';
+import { OrbitControls } from 'https://esm.sh/three@0.152.2/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 
@@ -38,9 +35,7 @@ scene.add(light);
 
 // IFCローダー
 const loader = new IFCLoader();
-
-// 👇 これ必須
-loader.ifcManager.setWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.42/");
+loader.ifcManager.setWasmPath("https://esm.sh/web-ifc@0.0.42/");
 
 // 読み込み
 loader.load('./model.ifc', (model) => {
