@@ -22,6 +22,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const loader = new IFCLoader();
+
+// 👇これ追加（超重要）
+loader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.43/");
+
+// 読み込み
 loader.load('./model.ifc', (model) => {
     scene.add(model);
 });
@@ -34,7 +39,6 @@ function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
-animate();
 </script>
 </body>
 </html>
