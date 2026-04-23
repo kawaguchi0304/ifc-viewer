@@ -11,7 +11,10 @@
 
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
-import { IFCLoader } from 'https://cdn.jsdelivr.net/npm/web-ifc-three@0.0.125/IFCLoader.js';
+
+// 👇 これがポイント（ESM対応版）
+import { IFCLoader } from 'https://cdn.jsdelivr.net/npm/web-ifc-three@0.0.125/dist/IFCLoader.js';
+
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
@@ -23,7 +26,6 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// 操作（回転・ズーム）
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
@@ -36,13 +38,14 @@ scene.add(light);
 
 // IFCローダー
 const loader = new IFCLoader();
+
+// 👇 これ必須
 loader.ifcManager.setWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.42/");
 
-// モデル読み込み
+// 読み込み
 loader.load('./model.ifc', (model) => {
     scene.add(model);
 
-    // 👇 自動で中心に合わせる（重要）
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3()).length();
@@ -53,19 +56,12 @@ loader.load('./model.ifc', (model) => {
     controls.update();
 });
 
-// 描画ループ
+// 描画
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
 animate();
-
-// リサイズ対応
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
 
 </script>
 
