@@ -8,12 +8,12 @@
   </style>
 </head>
 <body>
+
 <script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
 
-import * as THREE from 'https://unpkg.com/three@0.152.2/build/three.module.js';
-
-// 👇ここが重要（?module付き）
-import { IFCLoader } from 'https://unpkg.com/web-ifc-three@0.0.125/IFCLoader.js?module';
+// 👇ここが超重要（パス修正済み）
+import { IFCLoader } from 'https://cdn.jsdelivr.net/npm/web-ifc-three@0.0.125/IFCLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -25,17 +25,17 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // ライト
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(10, 10, 10);
 scene.add(light);
 
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-
 // IFCローダー
 const loader = new IFCLoader();
 
-// 👇これ絶対必要
-loader.ifcManager.setWasmPath("https://unpkg.com/web-ifc@0.0.42/");
+// 👇これが無いと絶対動かない
+loader.ifcManager.setWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.42/");
 
 // 読み込み
 loader.load('./model.ifc', (model) => {
@@ -48,7 +48,7 @@ function animate() {
     renderer.render(scene, camera);
 }
 animate();
-
 </script>
+
 </body>
 </html>
